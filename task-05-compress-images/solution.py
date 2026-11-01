@@ -101,7 +101,6 @@ def main() -> None:
         ext = path.suffix.lower()
 
         rel = path.relative_to(src)
-        dst = out / rel.with_suffix((".jpg" if ext in SUPPORTED else ext))
 
         if ext not in SUPPORTED:
             if ext in SKIP_EXT:
@@ -114,8 +113,11 @@ def main() -> None:
 
             with Image.open(path) as raw:
                 im = ImageOps.exif_transpose(raw)
-                # 已达标：直接复制，避免二次失真
-                if orig_size <= args.target and max(im.size) <= MAX_SIDE:
+                compliant = orig_size <= args.target and max(im.size) <= MAX_SIDE
+
+                if compliant:
+                    # 已达标：按原名复制（仅扩展名转小写），避免二次失真
+                    dst = out / rel.with_suffix(path.suffix.lower())
                     dst.parent.mkdir(parents=True, exist_ok=True)
                     shutil.copy2(path, dst)
                     print(f"{rel}  {human(orig_size)} -> {human(orig_size)}  OK(跳过重编码)")
@@ -125,6 +127,8 @@ def main() -> None:
                 im = fit_max_side(flatten_to_rgb(im), MAX_SIDE)
                 data = compress_to_target(im, args.target)
 
+            # 需要重编码：统一输出 JPEG
+            dst = out / rel.with_suffix(".jpg")
             dst.parent.mkdir(parents=True, exist_ok=True)
             dst.write_bytes(data)
             print(f"{rel}  {human(orig_size)} -> {human(len(data))}  OK")

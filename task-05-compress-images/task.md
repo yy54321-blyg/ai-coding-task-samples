@@ -59,7 +59,8 @@ in/sub/photo.JPG 1.8 MB -> 173 KB  OK
 - [ ] `out/` 的目录结构与 `in/` 一致（含 `sub/` 子目录）
 - [ ] `anim.gif` 被跳过，**不出现在输出目录**
 - [ ] 原 `in/` 目录下**所有文件的 size 与 mtime 均未变化**
-- [ ] 输出扩展名统一为 `.jpg`（`photo.JPG` → `photo.jpg`）
+- [ ] 达标文件保留原扩展名（仅转小写）：`small.png` → `out/small.png`
+- [ ] 未达标文件重编码后统一输出 `.jpg`：`photo.JPG` → `out/photo.jpg`
 - [ ] 处理 100 张图时不出现**无限循环**（有明确的最大重试次数）
 
 ---

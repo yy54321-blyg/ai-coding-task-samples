@@ -20,3 +20,11 @@ Thumbs.db
 .vscode/
 .idea/
 *.swp
+
+# 测试产物
+.pytest_cache/
+*.xml
+.coverage
+
+# 评分器临时目录
+grade_*/

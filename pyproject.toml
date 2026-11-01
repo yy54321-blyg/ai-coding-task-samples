@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ai-coding-task-samples"
+version = "1.1.0"
+description = "AI Coding 任务设计样例集：规格 + 参考实现 + 可执行的验收标准 + 自动评分器"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "Pillow>=10.0.0",
+    "requests>=2.31.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# 让测试文件可以 `from harness import grader`
+pythonpath = ["."]
+addopts = "-q --strict-markers"
+filterwarnings = ["error::DeprecationWarning"]
